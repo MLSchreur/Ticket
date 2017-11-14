@@ -22,4 +22,7 @@ public class TicketService {
 		ticketRepository.save(ticket);
 	}
 
+	public Ticket findById(Long ticketId) {
+		return ticketRepository.findOne(ticketId);
+	}
 }

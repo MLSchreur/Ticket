@@ -4,6 +4,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -14,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import nl.ticket.domain.Owner;
+import nl.ticket.domain.Ticket;
 import nl.ticket.persistence.OwnerService;
+import nl.ticket.persistence.TicketService;
 
 @Path("owner")
 @Component
@@ -23,6 +26,17 @@ public class OwnerEndpoint {
 	@Autowired
 	private OwnerService ownerService;
 	
+	@Autowired
+	private TicketService ticketService;
+	
+//	/**
+//	 * Aanmaken van nieuwe owner
+//	 * @param	owner Cre&euml;ren van een nieuwe Owner.
+//	 * @return 	Code 202 (Accepted)<br>
+//	 * 			Code 406 (Not acceptable) - 1 = heeft al een id<br>
+//	 * 			Code 406 (Not acceptable) - 2 = gegevens niet goed ingevuld<br>
+//	 * 			Code 406 (Not acceptable) - 3 = gebruikersnaam bestaat al
+//	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -53,12 +67,22 @@ public class OwnerEndpoint {
 		}
 	}
 	
+	/**
+	 * Opvragen van alle owners.
+	 * @return 	Code 200 (OK)<br>
+	 * 			Code 204 (No Content)<br>
+	 * 			Alle owners (zonder wactwoord) worden als JSON objecten teruggegeven.
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listOwner(){
-		System.out.println("Got the OWNER list!");
 		Iterable <Owner> result = ownerService.findAll();
-		return Response.ok(result).build();
+		if(result != null){
+			System.out.println("Got the OWNER list!");
+			return Response.ok(result).build();
+		} else {
+			return Response.noContent().build();
+		}
 	}
 	
 	/**
@@ -76,6 +100,39 @@ public class OwnerEndpoint {
 			return Response.accepted().build();
 		} else {
 			return Response.noContent().build();
+		}
+	}
+	
+	/**
+	 * Aanmaken van koppeling tussen Ticket(id) met Owner (id).
+	 * @param 	id 					Id van de Owner waar een Ticket aan toegevoegd moet worden.
+	 * @param	ticketId			Ticket die toegevoegd moet worden aan Owner (id).
+	 * @return 	0 = Owner en Ticket zijn gekoppeld<br>
+	 * 		 	1 = Owner met opgegeven id bestaat niet.<br>
+	 * 		 	2 = Ticket met opgegeven id bestaat niet.<br>
+	 * 		 	3 = Ticket met opgegeven id is al gekoppeld aan de Owner.
+	 */
+	@PUT
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("{id}/ticket/{ticket_id}")
+	public Response addTicketToOwner(@PathParam("id") Long id, @PathParam("ticket_id") Long ticketId) {
+		Owner owner = ownerService.findById(id);
+		if(owner != null){
+			Ticket ticket = ticketService.findById(ticketId);
+			if(ticket != null){
+				if(!owner.isLinkedTicket(ticket)){
+					owner.addTicket(ticket);
+					System.out.println(owner.getId());
+					ownerService.save(owner);
+					return Response.accepted().build();
+				} else {
+					return Response.status(406).entity("3").build();
+				}
+			} else {
+				return Response.status(406).entity("2").build();
+			}
+		} else {
+			return Response.status(406).entity("1").build();
 		}
 	}
 }
