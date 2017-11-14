@@ -33,12 +33,24 @@ public class OwnerEndpoint {
 		return Response.accepted(result).build();
 	}
 	
+	/**
+	 * Opvragen van de owner.
+	 * Op basis van id worden de gegevens gefilterd via een JSON object teruggegeven.
+	 * @param 	id 	Id van het Owner wordt uit het path gehaald.
+	 * @return 	Code 200 (OK)<br>
+	 * 		 	Code 204 (No Content)<br>
+	 * 			Opgevraagde owner wordt (zonder wachtwoord) als JSON object teruggegeven.
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
-	public Response getOwnerById(@PathParam("id") Long id){
+	public Response getOwnerById(@PathParam("id") Long id) {
 		Owner result = this.ownerService.findById(id);
-		return Response.ok(result).build();
+		if (result != null) {
+			return Response.ok(result).build();
+		} else {
+			return Response.noContent().build();
+		}
 	}
 	
 	@GET
