@@ -1,9 +1,11 @@
 package nl.ticket.rest.service;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -21,6 +23,24 @@ public class OwnerEndpoint {
 	@Autowired
 	private OwnerService ownerService;
 	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response postOwner(Owner owner){
+		System.out.println("Posted: " + owner.getFirstName()
+			+ "." + owner.getInsertion() + "." + owner.getLastName());
+		Owner result = ownerService.save(owner);
+		return Response.accepted(result).build();
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}")
+	public Response getOwnerById(@PathParam("id") Long id){
+		Owner result = this.ownerService.findById(id);
+		return Response.ok(result).build();
+	}
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listOwner(){
@@ -29,12 +49,21 @@ public class OwnerEndpoint {
 		return Response.ok(result).build();
 	}
 	
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response postOwner(Owner owner){
-		System.out.println("Posted: " + owner.getFirstName() + " " + owner.getLastName());
-		ownerService.save(owner);
-		return Response.accepted(owner).build();
+	/**
+	 * Verwijderen van de opgegeven Owner (id) inclusief de koppelingen met de tickets.
+	 * @param 	id 	Id van de te verwijderen Owner wordt uit het path gehaald.
+	 * @return 	Code 202 (Accepted)<br>
+	 * 		 	Code 204 (No Content)
+	 */	
+	@DELETE
+	@Path("{id}")
+	public Response deleteOwnerById(@PathParam("id") Long id){
+		Owner owner = ownerService.findById(id);
+		if(owner != null){
+			ownerService.deleteById(id);
+			return Response.accepted().build();
+		} else {
+			return Response.noContent().build();
+		}
 	}
 }

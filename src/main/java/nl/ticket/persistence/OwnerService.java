@@ -18,7 +18,15 @@ public class OwnerService {
 		return result;
 	}
 	
-	public void save(Owner owner){
-		ownerRepository.save(owner);
+	public Owner save(Owner owner){
+		return ownerRepository.save(owner);
+	}
+
+	public Owner findById(Long id) {
+		return ownerRepository.findOne(id);
+	}
+
+	public void deleteById(Long id) {
+		ownerRepository.delete(id);
 	}
 }
