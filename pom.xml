@@ -15,7 +15,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.4.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -59,8 +59,36 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<!-- ======================================================================= -->
+			<!-- used when generating javadoc from command line with mvn javadoc:javadoc -->
+			<!-- https://maven.apache.org/plugins/maven-javadoc-plugin/ -->
+			<!-- https://maven.apache.org/plugins/maven-javadoc-plugin/usage.html -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.4</version><!--$NO-MVN-MAN-VER$-->
+				<configuration>
+					<show>private</show>        <!-- public protected package or private -->
+				</configuration>
+			</plugin>
 		</plugins>
+
 	</build>
+
+	<!-- ======================================================================= -->
+	<!-- used when generating javadoc from command line with mvn clean site -->
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.4</version>
+				<configuration>
+					<show>package</show>        <!-- public protected package or private -->
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 
 
 </project>
