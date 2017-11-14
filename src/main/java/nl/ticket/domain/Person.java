@@ -1,5 +1,6 @@
 package nl.ticket.domain;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,11 +12,17 @@ public abstract class Person {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+	@Column(nullable=false)
 	private String firstName;
-	
+	private String insertion;
+	@Column(nullable=false)
 	private String lastName;
 	
 	private String email;
+	
+	@Column(unique=true, nullable=false)
+	private String username;
+	private String password;
 	
 	/* =================================================================== */
 	/* Getters & Setters                                                   */ 
@@ -26,6 +33,14 @@ public abstract class Person {
 	/* =================================================================== */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+	/* =================================================================== */
+	public String getInsertion() {
+		return insertion;
+	}
+	/* =================================================================== */
+	public void setInsertion(String insertion) {
+		this.insertion = insertion;
 	}
 	/* =================================================================== */
 	public String getLastName() {
@@ -46,5 +61,21 @@ public abstract class Person {
 	/* =================================================================== */
 	public long getId() {
 		return id;
+	}
+	/* =================================================================== */
+	public String getUsername() {
+		return username;
+	}
+	/* =================================================================== */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	/* =================================================================== */
+	public String getPassword() {
+		return password;
+	}
+	/* =================================================================== */
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

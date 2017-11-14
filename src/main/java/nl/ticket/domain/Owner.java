@@ -15,7 +15,7 @@ public class Owner extends Person {
 	
 	@OneToMany(fetch=FetchType.EAGER)
 	@Fetch(FetchMode.SELECT)
-	private List <Ticket> tickets = new ArrayList <Ticket>();
+	private List<Ticket> tickets = new ArrayList<Ticket>();
 
 	/* =================================================================== */
 	/* Getters & Setters                                                   */ 
