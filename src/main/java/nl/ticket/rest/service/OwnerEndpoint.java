@@ -39,7 +39,7 @@ public class OwnerEndpoint {
 //	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public Response postOwner(Owner owner){
 		System.out.println("Posted: " + owner.getFirstName()
 			+ "." + owner.getInsertion() + "." + owner.getLastName());
