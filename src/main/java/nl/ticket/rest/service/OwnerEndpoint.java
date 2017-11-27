@@ -43,8 +43,8 @@ public class OwnerEndpoint {
 	public Response postOwner(Owner owner){
 		System.out.println("Posted: " + owner.getFirstName()
 			+ "." + owner.getInsertion() + "." + owner.getLastName());
-		Owner result = ownerService.save(owner);
-		return Response.accepted(result).build();
+		//Owner result = ownerService.save(owner);
+		return Response.accepted().build();
 	}
 	
 	/**
