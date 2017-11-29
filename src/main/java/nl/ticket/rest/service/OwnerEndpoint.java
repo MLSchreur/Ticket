@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import nl.ticket.domain.Owner;
 import nl.ticket.domain.Ticket;
 import nl.ticket.persistence.OwnerService;
+import nl.ticket.persistence.PersonService;
 import nl.ticket.persistence.TicketService;
 
 @Path("owner")
@@ -29,22 +30,41 @@ public class OwnerEndpoint {
 	@Autowired
 	private TicketService ticketService;
 	
-//	/**
-//	 * Aanmaken van nieuwe owner
-//	 * @param	owner Cre&euml;ren van een nieuwe Owner.
-//	 * @return 	Code 202 (Accepted)<br>
-//	 * 			Code 406 (Not acceptable) - 1 = heeft al een id<br>
-//	 * 			Code 406 (Not acceptable) - 2 = gegevens niet goed ingevuld<br>
-//	 * 			Code 406 (Not acceptable) - 3 = gebruikersnaam bestaat al
-//	 */	
+	@Autowired
+	private PersonService personService;
+	
+	/**
+	 * Aanmaken van nieuwe owner
+	 * @param	owner Cre&euml;ren van een nieuwe Owner.
+	 * @return 	Code 202 (Accepted)<br>
+	 * 			Code 406 (Not acceptable) - 1 = heeft al een id<br>
+	 * 			Code 406 (Not acceptable) - 2 = gegevens niet goed ingevuld<br>
+	 * 			Code 406 (Not acceptable) - 3 = gebruikersnaam bestaat al
+	 */	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response postOwner(Owner owner){
-		System.out.println("Posted: " + owner.getFirstName()
+		int personCheck = personService.postPerson(owner);
+		switch(personCheck){
+		case 0:
+			ownerService.save(owner);
+			System.out.println("Posted: " + owner.getFirstName()
 			+ "." + owner.getInsertion() + "." + owner.getLastName());
-		//Owner result = ownerService.save(owner);
-		return Response.accepted().build();
+			return Response.accepted().build();
+		case 1:
+			System.out.println("Heeft al een id");
+			return Response.status(406).entity(1).build();
+		case 2:
+			System.out.println("Ontbrekende gegevens");
+			return Response.status(406).entity(2).build();
+		case 3:
+			System.out.println("Gebruikersnaam bestaat al");
+			return Response.status(406).entity(3).build();
+		default:
+			System.out.println("Onbekende return");
+			return Response.status(406).build();
+		}
 	}
 	
 	/**
