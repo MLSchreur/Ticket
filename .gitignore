@@ -28,7 +28,7 @@ tmp/
 # ===========================================
 # Exclude application.properties
 # ===========================================
-src/main/resources/application.properties
+# src/main/resources/application.properties
 
 # ===========================================
 # Exclude other files
