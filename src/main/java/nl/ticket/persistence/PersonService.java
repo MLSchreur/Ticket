@@ -19,7 +19,7 @@ public class PersonService {
 	
 	/**
 	 * Aanmaken van nieuwe gebruiker
-	 * @param	gebruiker Cre&euml;ren van een nieuwe gebruiker.
+	 * @param	person Cre&euml;ren van een nieuwe gebruiker.
 	 * @return 	0 = gebruiker kan worden opgeslagen
 	 * 			1 = heeft al een id<br>
 	 * 			2 = gegevens niet goed ingevuld<br>
@@ -50,7 +50,7 @@ public class PersonService {
 	
 	/**
 	 * Controle of gebruikersnaam bestaat
-	 * @param validateGebruiker De te valideren gebruiker
+	 * @param validatePerson De te valideren gebruiker
 	 * @return 	0   = gebruikersnaam bestaat niet
 	 * 			1 	= gebruiker is docent
 	 * 			2	= gebruiker is leerling
